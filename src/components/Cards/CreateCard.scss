@@ -113,14 +113,16 @@
                   overflow: hidden;
                   border-top: 1px solid black;
                   border-bottom: 1px solid black;
+
                   .background-option{
-                    display: flex;
+                    display: inline-flex;
                     gap: 1%;
                     transition: transform 0.5s ease-in-out;
                     width: fit-content;
                     align-items: center;
                     margin-left: 1%;
-                    img, .import-new-image {
+
+                    img {
                       width: 21.2%;
                       height: 90%;
                       border-radius: 5px;
@@ -132,24 +134,25 @@
                         transform: scale(1.1);
                       }
                     }
+
                     .import-new-image {
                       display: flex;
                       flex: none;
+                      width: 19.08%;
+                      height: 90%;
                       align-items: center;
                       justify-content: center;
                       background-color: #f8f8f8;
-                      border: 2px dashed #ccc;
-                      font-size: 24px;
+                      border-radius: 5px;
                       cursor: pointer;
+                      border: 2px dashed #ccc;
                       transition: background 0.3s ease;
 
                       &:hover {
                         background-color: #eee;
+                        transform: scale(1.1);
                       }
                     }
-                  }
-                  .image-list.transition {
-                    transition: transform 0.5s ease-in-out;
                   }
                 }
               }
@@ -199,6 +202,11 @@
               justify-content: center;
               flex-wrap: wrap;
 
+              form{
+                width: 100%;
+                border-radius: 5px;
+              }
+
               input {
                 width: 100%;
                 padding: 8px;
@@ -213,7 +221,6 @@
               .create-card-show-hide-btn{
                 display: flex;
                 position: absolute;
-                background-color: red;
                 width: 10%;
                 height: 100%;
                 right: 0;

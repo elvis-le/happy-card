@@ -1,9 +1,9 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
-    setTitle, setSender, setReceiver,
+    setTitle, setSender, setReceiver, setCurrentPage,
     addPage, updateCurrentPageContent, removePage,
-    prevPage, nextPage, setActivePage, goToCreateCard
+    prevPage, nextPage, setActivePage, goToCreateCard, updateCurrentPageImage,
 } from "../../redux/editCardSlice";
 import Footer from "../Footer";
 import ContentForm from "./ContentForm";
@@ -28,7 +28,11 @@ const EditCard = () => {
 
     const handleClick = () => {
         dispatch(goToCreateCard());
-        navigate(`/CreateCard`, { state: { title, sender, receiver, pages } });
+        dispatch(setCurrentPage(0));
+        navigate(`/CreateCard`, {
+            state: { title, sender, receiver, pages}
+        });
+
     };
 
     return (

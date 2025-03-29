@@ -1,58 +1,45 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    currentPage: 0,
-    activePage: "titlePage",
+    imageIndex: 0,
+    showPassword: false,
     musicName: "",
     musicSrc: null,
-    showPassword: false,
-    password: "",
-    images: ["https://picsum.photos/200/300?random=1", "https://picsum.photos/200/300?random=2", "https://picsum.photos/200/300?random=3", "https://picsum.photos/200/300?random=4", "https://picsum.photos/200/300?random=5", "https://picsum.photos/200/300?random=6", "https://picsum.photos/200/300?random=7", "https://picsum.photos/200/300?random=8", "https://picsum.photos/200/300?random=9"],
-    selectedImageIndex: 0,
-
+    currentPage: 0,
+    activePage: "titlePage",
 };
 
 const createCardSlice = createSlice({
     name: "createCard",
     initialState,
     reducers: {
-        setActivePage: (state, action) => {
-            state.activePage = action.payload;
+        setImageIndex: (state, action) => {
+            state.imageIndex = action.payload;
+        },
+        toggleShowPassword: (state) => {
+            state.showPassword = !state.showPassword;
         },
         setMusic: (state, action) => {
             state.musicName = action.payload.name;
             state.musicSrc = action.payload.src;
         },
-        setPassword: (state, action) => {
-            state.password = action.payload;
+        setCurrentPage: (state, action) => {
+            state.currentPage = action.payload;
         },
-        toggleShowPassword: (state) => {
-            state.showPassword = !state.showPassword;
-        },
-        setImageIndex: (state, action) => {
-            state.selectedImageIndex = action.payload;
-        },
-        prevImage: (state) => {
-            if (state.selectedImageIndex > 0) {
-                state.selectedImageIndex -= 1;
-            }
+        setActivePage: (state, action) => {
+            state.activePage = action.payload;
         },
         nextImage: (state) => {
-            if (state.selectedImageIndex < state.images.length - 1) {
-                state.selectedImageIndex += 1;
-            }
+                state.imageIndex += 1;
         },
-        goToCreateCard: (state) => {
-            console.log("Navigating to CreateCard with data:", state);
+        prevImage: (state) => {
+                state.imageIndex -= 1;
         },
-    },
+    }
 });
 
-export const {
-    setTitle, setSender, setReceiver,
-    setActivePage, goToCreateCard,
-    setMusic, setPassword, toggleShowPassword,
-    setImageIndex, prevImage, nextImage
-} = createCardSlice.actions;
-
+export const { setImageIndex, toggleShowPassword,
+    setMusic, setCurrentPage,
+    setActivePage,
+ nextImage, prevImage} = createCardSlice.actions;
 export default createCardSlice.reducer;

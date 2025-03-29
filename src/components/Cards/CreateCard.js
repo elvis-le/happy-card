@@ -7,81 +7,72 @@ import {useLocation, useNavigate} from "react-router-dom";
 import CardPreview from "./CardPreview";
 import {BiHide, BiShow} from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
+import {
+    setImageIndex,
+    toggleShowPassword,
+    setMusic,
+    setCurrentPage,
+    setActivePage,
+    nextImage,
+    prevImage,
+} from "../../redux/createCardSlice";
+import { updateCurrentPageImage,
+    nextPage,
+    prevPage, } from "../../redux/editCardSlice";
 
 const CreateCard = () => {
-
-
     const navigate = useNavigate();
     const location = useLocation();
+    const dispatch = useDispatch();
 
-    const {title, sender, receiver, pages} = location.state || {};
-    const [currentPage, setCurrentPage] = useState(0);
-    const [showPassword, setShowPassword] = useState(false);
+    const {title, sender, receiver, pages } = location.state || {};
+    const currentPage = useSelector((state) => state.editCard.currentPage);
 
-    const [activePage, setActivePage] = useState({
-        titlePage: true,
-        contentPage1: false,
-        createPage: false,
-        previewPage: false,
-    });
+    const {
+        imageIndex,
+        showPassword,
+        musicName,
+        musicSrc,
+        activePage
+    } = useSelector((state) => state.createCard);
 
-    const handlePageClick = (option) => {
-        setActivePage({
-            titlePage: false,
-            contentPage: false,
-            createPage: false,
-            previewPage: false,
-            [option]: true,
-        });
-    };
-
-    const prevPage = () => {
-        if (currentPage > 0) setCurrentPage(currentPage - 1);
-    };
-
-    const nextPage = () => {
-        if (currentPage < pages.length - 1) setCurrentPage(currentPage + 1);
-    };
-
-    const images = ["https://picsum.photos/200/300?random=1", "https://picsum.photos/200/300?random=2", "https://picsum.photos/200/300?random=3", "https://picsum.photos/200/300?random=4", "https://picsum.photos/200/300?random=5", "https://picsum.photos/200/300?random=6", "https://picsum.photos/200/300?random=7", "https://picsum.photos/200/300?random=8", "https://picsum.photos/200/300?random=9"];
+    const images = ["https://picsum.photos/200/300?random=1",
+        "https://picsum.photos/200/300?random=2", "https://picsum.photos/200/300?random=3",
+        "https://picsum.photos/200/300?random=4", "https://picsum.photos/200/300?random=5",
+        "https://picsum.photos/200/300?random=6", "https://picsum.photos/200/300?random=7",
+        "https://picsum.photos/200/300?random=8", "https://picsum.photos/200/300?random=9",
+        "https://picsum.photos/200/300?random=10", "https://picsum.photos/200/300?random=11",
+        "https://picsum.photos/200/300?random=12", "https://picsum.photos/200/300?random=13",
+        "https://picsum.photos/200/300?random=14", "https://picsum.photos/200/300?random=15",];
 
     const totalImages = images.length;
 
-    const [index, setIndex] = useState(0);
     const listRef = useRef(null);
 
-    const nextImage = () => {
-        if (index >= totalImages) return;
-        setIndex(index + 1);
-        listRef.current.style.transition = "transform 0.5s ease-in-out";
+    const handlePageClick = (option) => {
+        dispatch(setActivePage(option));
     };
-
-    const prevImage = () => {
-        if (index <= 0) {
-            setTimeout(() => {
-                listRef.current.style.transition = "none";
-                setIndex(totalImages - 1);
-            }, 500);
-        } else {
-            setIndex(index - 1);
-            listRef.current.style.transition = "transform 0.5s ease-in-out";
-        }
-    };
-
-    const [musicName, setMusicName] = useState("");
-    const [musicSrc, setMusicSrc] = useState(null);
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {
-            setMusicName(file.name);
-            setMusicSrc(URL.createObjectURL(file));
+            dispatch(setMusic({ name: file.name, src: URL.createObjectURL(file) }));
         }
+    };
+
+    const [updatedPages, setUpdatedPages] = useState(pages);
+
+    const handleUpdateImage = (index, src) => {
+        dispatch(updateCurrentPageImage({ index, src }));
     };
 
     const handleBack = () => {
         navigate(-1);
     };
+
+    console.log("Pages:", pages);
+    console.log("Total Pages:", pages?.length);
+    console.log("Current Page Before Dispatch:", currentPage);
 
     return (
         <div className="create-card-wrapper">
@@ -116,21 +107,21 @@ const CreateCard = () => {
                                         </div>
                                     </div>
                                     <div className="background-option-choice">
-                                        <div className="previous-btn" onClick={prevImage}>
+                                        <div className="previous-btn" onClick={() => dispatch(prevImage())}>
                                             <GrPrevious/>
                                         </div>
                                         <div className="background-image-container">
                                             <div className="background-option"
                                                  ref={listRef}
-                                                 style={{transform: `translateX(-${index * 20.17}%)`}}>
+                                                 style={{transform: `translateX(-${imageIndex * 20.12}%)`}}>
                                                 {images.map((src, i) => (
-                                                    <img key={i} src={src} alt={`preview-${i}`}/>))}
+                                                    <img key={i} src={src} alt={`preview-${i}`} onClick={() => handleUpdateImage(currentPage, src)}/>))}
                                                 <div className="import-new-image">
                                                     +
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="next-btn" onClick={nextImage}>
+                                        <div className="next-btn" onClick={() => dispatch(nextImage())}>
                                             <GrNext/>
                                         </div>
                                     </div>
@@ -163,13 +154,15 @@ const CreateCard = () => {
                                     <span>Create password: </span>
                                 </div>
                                 <div className="create-card-password">
-                                    <input type={showPassword ? "text" : "password"}
-                                           id="password" />
-                                    <div className="create-card-show-hide-btn"
-                                         onClick={() => setShowPassword(!showPassword)}
-                                         style={{ cursor: "pointer" }}>
-                                        {showPassword ? <BiHide /> : <BiShow />}
-                                    </div>
+                                    <form>
+                                        <input type={showPassword ? "text" : "password"}
+                                               id="password"/>
+                                    </form>
+                                        <div className="create-card-show-hide-btn"
+                                             onClick={() => dispatch(toggleShowPassword())}
+                                             style={{cursor: "pointer"}}>
+                                            {showPassword ? <BiHide/> : <BiShow/>}
+                                        </div>
                                 </div>
                             </div>
                             <div className="create-card-link-btn-wrap">
@@ -187,11 +180,11 @@ const CreateCard = () => {
                         </div>
                         <div className="watch-over-card">
                             <div className="overview-card">
-                                <CardPreview title={title} sender={sender}
-                                             receiver={receiver} pages={pages}
-                                             currentPage={currentPage} setCurrentPage={setCurrentPage}
-                                             handlePageClick={handlePageClick} activePage={activePage}
-                                             prevPage={prevPage} nextPage={nextPage}
+                                <CardPreview
+                                    title={title} sender={sender} receiver={receiver} pages={pages}
+                                    currentPage={currentPage} setCurrentPage={(page) => dispatch(setCurrentPage(page))}
+                                    handlePageClick={handlePageClick} activePage={activePage}
+                                    prevPage={() => dispatch(prevPage())} nextPage={() => dispatch(nextPage())}
                                 />
                             </div>
                         </div>

@@ -3,6 +3,7 @@ import counterReducer from "./counterSlice";
 import authReducer from "./authSlice";
 import pageReducer from "./pageSlice";
 import editCardReducer from "./editCardSlice";
+import createCardReducer from "./createCardSlice";
 
 export const store = configureStore({
     reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
         auth: authReducer,
         page: pageReducer,
         editCard: editCardReducer,
+        createCard: createCardReducer,
     },
 });
 

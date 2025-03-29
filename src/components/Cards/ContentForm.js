@@ -48,7 +48,7 @@ const ContentForm = ({
                             Content:
                         </div>
                         <textarea name="content" className="content"
-                                  value={pages[currentPage]}
+                                  value={pages[currentPage].content}
                                   onChange={(e) => updateCurrentPageContent(e.target.value)}/>
                     </div>
                 </div>
@@ -140,7 +140,7 @@ const ContentForm = ({
                             </div>
                         }
                         <div className="preview-content">
-                            <p>{pages[currentPage]}</p>
+                            <p>{pages[currentPage].content}</p>
                         </div>
                         {currentPage === pages.length - 1 &&
                             < div className="preview-sender">

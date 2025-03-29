@@ -2,12 +2,18 @@ import birthdayCard from "../../assets/birthdaycard.png";
 import birthdayCardCover from "../../assets/birthdaycard-cover.png";
 import './CardPreview.scss'
 import {GrFormNextLink, GrFormPreviousLink} from "react-icons/gr";
+import {nextPage, prevPage} from "../../redux/editCardSlice";
 
 const CardPreview = ({title, sender, receiver, pages, currentPage, setCurrentPage, handlePageClick, activePage, prevPage, nextPage }) => {
+
+    console.log("currentPage:", currentPage);
+    console.log("pages:", pages);
+    console.log("pages.length:", pages.length);
+
     return (
         <div className="card-preview-wrapper">
             <div className="card-preview-wrap">
-                {activePage.titlePage &&
+                {activePage === "titlePage" &&
                     <div className="card-view-edit-wrap">
                         <div className="card-view-edit-image">
                             <img src={birthdayCardCover} alt="card-view"/>
@@ -19,10 +25,10 @@ const CardPreview = ({title, sender, receiver, pages, currentPage, setCurrentPag
                         </div>
                     </div>
                 }
-                {activePage.contentPage &&
+                {activePage === "contentPage" &&
                     <div className="card-view-edit-wrap">
                         <div className="card-view-edit-image">
-                            <img src={birthdayCard} alt="card-view"/>
+                            <img src={birthdayCardCover} alt="card-view"/>
                         </div>
                         <div className="view-content-edit">
                             {currentPage === 0 &&
@@ -34,7 +40,7 @@ const CardPreview = ({title, sender, receiver, pages, currentPage, setCurrentPag
                                 </div>
                             }
                             <div className="preview-content">
-                                <p>{pages[currentPage]}</p>
+                                <p>{pages[currentPage].content}</p>
                             </div>
                             {currentPage === pages.length - 1 &&
                                 < div className="preview-sender">
@@ -52,14 +58,20 @@ const CardPreview = ({title, sender, receiver, pages, currentPage, setCurrentPag
                 }
                 <div className="card-preview-btn">
                     <div
-                        className={`previous-card-btn ${activePage.titlePage ? "disabled" : ""}`}
-                        onClick={currentPage === 0 ? () => handlePageClick("titlePage") : () => setCurrentPage(currentPage - 1)}
+                        className={`previous-card-btn ${activePage === "titlePage" ? "disabled" : ""}`}
+                        onClick={currentPage === 0 ? () => handlePageClick("titlePage") : () => prevPage()}
                     >
                         <GrFormPreviousLink/>{"   "}Previous
                     </div>
                     <div
                         className={`next-card-btn ${currentPage === pages.length - 1 ? "disabled" : ""}`}
-                        onClick={activePage.titlePage ? () => handlePageClick("contentPage") : currentPage === pages.length - 1 ? () => setCurrentPage(currentPage) : () => setCurrentPage(currentPage + 1)}
+                        onClick={
+                            activePage === "titlePage"
+                                ? () => handlePageClick("contentPage")
+                                : currentPage === pages.length - 1
+                                    ? null
+                                    : () => nextPage()
+                        }
                     >Next{"   "}<GrFormNextLink/>
                     </div>
                 </div>

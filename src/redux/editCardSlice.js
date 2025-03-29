@@ -4,7 +4,7 @@ const initialState = {
     title: "",
     sender: "",
     receiver: "",
-    pages: [""],
+    pages: [{ content: "", src: "" }],
     currentPage: 0,
     activePage: "titlePage",
 };
@@ -16,6 +16,9 @@ const editCardSlice = createSlice({
         setTitle: (state, action) => {
             state.title = action.payload;
         },
+        setCurrentPage: (state, action) => {
+            state.currentPage = action.payload;
+        },
         setSender: (state, action) => {
             state.sender = action.payload;
         },
@@ -23,12 +26,22 @@ const editCardSlice = createSlice({
             state.receiver = action.payload;
         },
         addPage: (state) => {
-            state.pages.push("");
+            state.pages.push({ content: "", src: "" });
             state.currentPage = state.pages.length - 1;
         },
         updateCurrentPageContent: (state, action) => {
-            state.pages[state.currentPage] = action.payload;
+            state.pages[state.currentPage].content = action.payload;
         },
+        updateCurrentPageImage: (state, action) => {
+            const { index, src } = action.payload;
+            if (state.pages[index]) {
+                state.pages[index] = {
+                    ...(typeof state.pages[index] === "string" ? { content: state.pages[index] } : state.pages[index]),
+                    src,
+                };
+            }
+        },
+
         removePage: (state) => {
             if (state.pages.length > 1) {
                 state.pages.splice(state.currentPage, 1);
@@ -53,7 +66,8 @@ const editCardSlice = createSlice({
 export const {
     setTitle, setSender, setReceiver,
     addPage, updateCurrentPageContent, removePage,
-    prevPage, nextPage, setActivePage, goToCreateCard
+    prevPage, nextPage, setActivePage, goToCreateCard,
+    updateCurrentPageImage, setCurrentPage
 } = editCardSlice.actions;
 
 export default editCardSlice.reducer;
