@@ -1,24 +1,33 @@
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import Home from './components/Home';
+import {useDispatch, useSelector} from "react-redux";
+import Login from "./components/Login";
+import CreateCard from "./components/Cards/CreateCard";
+import Dashboard from "./components/Admin/Dashboard";
+import {setCurrentPage} from "./redux/pageSlice";
 
 function App() {
+
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const currentPage = useSelector(state => state.page.currentPage);
+  if (!isAuthenticated) {
+    return <Login />;
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div>
+        <nav>
+          <button onClick={() => dispatch(setCurrentPage("home"))}>Home</button>
+          <button onClick={() => dispatch(setCurrentPage("createCard"))}>Create Card</button>
+          <button onClick={() => dispatch(setCurrentPage("dashboard"))}>Dashboard</button>
+        </nav>
+
+        {currentPage === "home" && <Home />}
+        {currentPage === "createCard" && <CreateCard />}
+        {currentPage === "dashboard" && <Dashboard />}
+      </div>
   );
 }
 

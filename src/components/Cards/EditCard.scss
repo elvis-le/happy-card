@@ -21,6 +21,7 @@
 
       .edit-card-form-wrapper {
         display: flex;
+        position: relative;
         width: 80%;
         margin: 2%;
         flex-wrap: wrap;
@@ -188,30 +189,14 @@
             }
           }
 
-          .create-card-btn-wrap {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
 
-            .create-card-btn, .next-card-btn, .previous-card-btn, .view-card-btn, .add-new-card-btn {
-              background: #007bff;
-              color: #fff;
-              padding: 10px 15px;
-              border-radius: 5px;
-              cursor: pointer;
-              transition: background 0.3s;
-
-              &:hover {
-                background: #0056b3;
-              }
-            }
-          }
         }
 
         .edit-card-view-wrap {
           height: 120vh;
           flex: 1;
-          display: flex;
+          display: inline-flex;
+          flex-wrap: wrap;
           justify-content: center;
           align-items: center;
           border-radius: 15px;
@@ -226,15 +211,16 @@
             text-align: center;
             align-items: center;
             justify-content: center;
+            flex-wrap: wrap;
 
             .card-view-edit-image {
               display: flex;
               width: 100%;
-              height: 100%;
+              height: 80%;
               align-items: center;
               img {
                 width: 100%;
-                height: 80%;
+                height: 100%;
               }
             }
 
@@ -274,6 +260,91 @@
                 margin-top: 5px;
               }
             }
+
+            .card-view-page-number {
+              position: absolute;
+              width: 100%;
+              height: 5%;
+              bottom: 5%;
+              .page-number {
+                display: flex;
+                width: 100%;
+                height: 100%;
+                align-items: center;
+                justify-content: center;
+                span {
+
+                }
+              }
+            }
+          }
+        }
+
+        .create-card-btn-wrap {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          position: absolute;
+          top: 0;
+          left: 0;
+          pointer-events: none;
+
+          .create-card-btn, .next-card-btn, .previous-card-btn, .view-card-btn, .add-new-card-btn, .delete-card-btn {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: auto;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+            background-color: white;
+            width: 10%;
+            height: 5%;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+
+            &:hover {
+              scale: 1.2;
+            }
+            &:active{
+              scale: 1.1;
+              box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+            }
+          }
+
+          .previous-card-btn{
+            top: 47%;
+            width: 6%;
+            height: 10%;
+            left: -2%;
+          }
+
+          .next-card-btn{
+            top: 47%;
+            width: 6%;
+            height: 10%;
+            right: -2%;
+          }
+
+          .create-card-btn{
+            bottom: 3%;
+            right: 5%;
+            width: 40%;
+          }
+
+          .view-card-btn{
+            top: 4%;
+            right: 35%;
+          }
+
+          .add-new-card-btn{
+            top: 4%;
+            right: 20%;
+          }
+
+          .delete-card-btn{
+            top: 4%;
+            right: 5%;
           }
         }
       }

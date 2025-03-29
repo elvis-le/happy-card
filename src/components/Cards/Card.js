@@ -1,10 +1,10 @@
-import logo from "../assets/logo.png";
+import logo from "../../assets/logo.png";
 import './Card.scss'
 import {MdCreate, MdOutlineFavorite, MdOutlineFavoriteBorder} from "react-icons/md";
-import Footer from "./Footer";
+import Footer from "../Footer";
 import {GrNext, GrPrevious} from "react-icons/gr";
 import {useEffect, useRef, useState} from "react";
-import Navigation from "./Navigation";
+import Navigation from "../Navigation";
 import {useNavigate, useParams} from "react-router-dom";
 
 const Card = () => {
@@ -25,7 +25,7 @@ const Card = () => {
             setTimeout(() => {
                 listRef.current.style.transition = "none";
                 setIndex(0);
-            }, 500); // Reset vị trí về đầu khi chạm ảnh cuối
+            }, 500);
         }
     }, [index, totalImages]);
 

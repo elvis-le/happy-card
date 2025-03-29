@@ -1,0 +1,80 @@
+.footer-wrapper{
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 20vh;
+  z-index: 100;
+  border: 1px solid black;
+  justify-content: space-between;
+  padding: 0 2rem;
+  margin-bottom: 0;
+
+  .support-wrapper{
+    .support-wrap{
+      width: 100%;
+      height: 80%;
+      .phone-number-wrap{
+        display: flex;
+        .phone-number-letter{
+          margin-right: 5px;
+        }
+        .phone-number{
+          color: #308df8;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  .aboutus-wrapper{
+    .aboutus-head{
+
+    }
+    .aboutus-wrap{
+      width: 100%;
+      height: 80%;
+      .introduciton-wrap{
+        .introduction{
+          color: #308df8;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  .contactus-wrapper{
+    height: 80%;
+    .contactus-head{
+      width: 100%;
+      height: 20%;
+      margin-bottom: 2%;
+    }
+    .contact-zalo-wrap{
+      display: inline-flex;
+      width: 25%;
+      height: 25%;
+      margin-right: 10px;
+      .zalo{
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        img{
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+    .contact-facebook-wrap{
+      display: inline-flex;
+      width: 25%;
+      height: 25%;
+      .facebook{
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        img{
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+}

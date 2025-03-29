@@ -1,25 +1,82 @@
-import Navigation from "./Navigation";
-import birthdayCard from '../assets/birthdaycard.png'
-import birthdayCardCover from '../assets/birthdaycard-cover.png'
+import Navigation from "../Navigation";
+import birthdayCard from '../../assets/birthdaycard.png'
+import birthdayCardCover from '../../assets/birthdaycard-cover.png'
 import './EditCard.scss'
-import Footer from "./Footer";
+import Footer from "../Footer";
 import {useState} from "react";
+import TitleForm from "./TitleForm";
+import ContentForm from "./ContentForm";
+import {GrFormNextLink, GrFormPreviousLink} from "react-icons/gr";
+import {IoMdAdd} from "react-icons/io";
+import {MdDeleteForever} from "react-icons/md";
+import {useNavigate} from "react-router-dom";
 
 const EditCard = () => {
     const [title, setTitle] = useState("");
     const [sender, setSender] = useState("");
     const [receiver, setReceiver] = useState("");
     const [content, setContent] = useState("");
+    const [pages, setPages] = useState([content]);
+    const [currentPage, setCurrentPage] = useState(0);
+    const navigate = useNavigate();
 
-    const [isTitleForm, setTitleForm] = useState(true);
+    const [activePage, setActivePage] = useState({
+        titlePage: true,
+        contentPage1: false,
+        createPage: false,
+        previewPage: false,
+    });
 
-    const handleClickContent = (e) => {
-        setContent(e.target.textContent);
+    const handlePageClick = (option) => {
+        setActivePage({
+            titlePage: false,
+            contentPage: false,
+            createPage: false,
+            previewPage: false,
+            [option]: true,
+        });
     };
 
     const handleClickTitle = (e) => {
         setTitle(e.target.textContent);
     };
+
+    const addNewPage = () => {
+        setPages([...pages, ""]);
+        setCurrentPage(pages.length);
+    };
+    const createCard = () => {
+        console.log("Creating card with pages:", pages);
+    };
+
+    const updateCurrentPageContent = (value) => {
+        const updatedPages = [...pages];
+        updatedPages[currentPage] = value;
+        setPages(updatedPages);
+    };
+
+    const removeCurrentPage = () => {
+        if (pages.length > 1) {
+            const updatedPages = pages.filter((_, index) => index !== currentPage);
+            setPages(updatedPages);
+            setCurrentPage(Math.max(0, currentPage - 1));
+        }
+    };
+
+    const prevPage = () => {
+        if (currentPage > 0) setCurrentPage(currentPage - 1);
+    };
+
+    const nextPage = () => {
+        if (currentPage < pages.length - 1) setCurrentPage(currentPage + 1);
+    };
+
+    const handleClick = () => {
+        navigate(`/CreateCard`, {
+            state: { title, sender, receiver, pages }
+        });
+    };
+
 
     return (
         <div className="edit-card-wrapper">
@@ -27,208 +84,56 @@ const EditCard = () => {
                 <Navigation/>
                 <div className="edit-card-wrap-component">
                     <div className="edit-card-form-wrapper">
-                        <div className="edit-card-form-wrap">
-                            <div className="edit-card-form-header">
-                                <h3>Birthday Card</h3>
+                        {activePage.titlePage &&
+                            <TitleForm title={title} setTitle={setTitle} goToNext={handlePageClick}
+                                       handleClickTitle={handleClickTitle}/>
+                        }
+                        {activePage.contentPage &&
+                            <ContentForm updateCurrentPageContent={updateCurrentPageContent}
+                                         removeCurrentPage={removeCurrentPage}
+                                         prevPage={prevPage} nextPage={nextPage} sender={sender} setSender={setSender}
+                                         pages={pages}
+                                         currentPage={currentPage} receiver={receiver} setReceiver={setReceiver}
+                                         goToPrevious={handlePageClick}
+                                         content={content} setContent={setContent} addNewPage={addNewPage}
+                                         createCard={createCard}
+                                         setCurrentPage={setCurrentPage}/>
+                        }
+                        {activePage.createPage &&
+                            <div></div>
+                        }
+                        {activePage.previewPage &&
+                            <div></div>
+                        }
+                        <div className="create-card-btn-wrap">
+                            <div
+                                className={`previous-card-btn ${currentPage === 0 ? "disabled" : ""}`}
+                                onClick={currentPage === 0 ? () => handlePageClick("titlePage") : () => setCurrentPage(currentPage - 1)}
+                            >
+                                <GrFormPreviousLink/>{"   "}Previous
                             </div>
-                            {isTitleForm &&
-                                <div className="edit-form-title-wrapper">
-                                    <div className="edit-card-form-title-wrap">
-                                        <div className="edit-card-form-title">
-                                            Title:
-                                        </div>
-                                        <input type="text" name="title" className="title-name"
-                                               value={title} onChange={(e) => setTitle(e.target.value)}/>
-                                    </div>
-                                </div>
-                            }
-                            {!isTitleForm &&
-                                <div className="edit-form-content-wrapper">
-                                    <div className="edit-card-form-sender-wrap">
-                                        <div className="edit-card-form-sender">
-                                            Sender:
-                                        </div>
-                                        <input type="text" name="sender" className="sender-name"
-                                               value={sender} onChange={(e) => setSender(e.target.value)}/>
-                                    </div>
-                                    <div className="edit-card-form-receiver-wrap">
-                                        <div className="edit-card-form-receiver">
-                                            Receiver:
-                                        </div>
-                                        <input type="text" name="receiver" className="receiver-name"
-                                               value={receiver} onChange={(e) => setReceiver(e.target.value)}/>
-                                    </div>
-                                    <div className="edit-card-form-content-wrap">
-                                        <div className="edit-card-form-content">
-                                            Content:
-                                        </div>
-                                        <textarea name="content" className="content"
-                                                  value={content} onChange={(e) => setContent(e.target.value)}/>
-                                    </div>
-                                </div>
-                            }
-                            <div className="suggest-content-option-wrap">
-                                <div className="suggest-content-type-option">
-                                    <div className="content-type-option">Choose content</div>
-                                    <div className="content-type-option">Love</div>
-                                    <div className="content-type-option">Husband</div>
-                                    <div className="content-type-option">Wife</div>
-                                    <div className="content-type-option">Friend</div>
-                                </div>
-                                <div className="suggest-content-option">
-                                    {!isTitleForm &&
-                                        <>
-                                            <div className="content-option" onClick={handleClickContent}>🎉 Happy
-                                                Birthday! May
-                                                this
-                                                year bring you happiness,
-                                                success, and all your heart’s desires. 🎂🎁
-                                            </div>
-                                            <div className="content-option" onClick={handleClickContent}>🤣 Happy
-                                                Birthday!
-                                                Don’t
-                                                count
-                                                the candles, just
-                                                enjoy
-                                                the glow. Wishing you a fantastic year ahead! 🎂🔥
-                                            </div>
-                                            <div className="content-option" onClick={handleClickContent}>💖 Happy
-                                                Birthday, my
-                                                love!
-                                                Every moment with you is
-                                                special, and I’m so lucky to have you by my side. Love you forever! 😘🎈
-                                            </div>
-                                            <div className="content-option" onClick={handleClickContent}>🎊 Happy
-                                                Birthday,
-                                                bestie! May
-                                                your day be as amazing
-                                                as you are. Let’s make unforgettable memories together! 🥳🎁
-                                            </div>
-                                            <div className="content-option" onClick={handleClickContent}>🎉 Wishing you a
-                                                wonderful
-                                                birthday filled with joy
-                                                and success. May this year bring you prosperity and happiness! 🎂🎈
-                                            </div>
-                                            <div className="content-option" onClick={handleClickContent}>🍀 Happy
-                                                Birthday!
-                                                Wishing you
-                                                a year full of good
-                                                health, laughter, and endless happiness. Stay amazing! 💪🎉
-                                            </div>
-                                            <div className="content-option" onClick={handleClickContent}>🚀 Happy
-                                                Birthday! May
-                                                you
-                                                reach new heights in your
-                                                career and personal life. Keep shining! ✨🎂
-                                            </div>
-                                            <div className="content-option" onClick={handleClickContent}>❤️ Wishing you
-                                                a day
-                                                filled
-                                                with love, laughter, and
-                                                everything that brings you joy. Happy Birthday! 🎁🎈
-                                            </div>
-                                            <div className="content-option" onClick={handleClickContent}>🎶 Another year,
-                                                another
-                                                adventure! May your birthday
-                                                be the start of a fantastic journey ahead. 🥂🎂
-                                            </div>
-                                            <div className="content-option" onClick={handleClickContent}>🌟 You are one
-                                                of a
-                                                kind, and
-                                                today is the perfect
-                                                day to celebrate you! Wishing you a birthday as special as you are. 🎉💖
-                                            </div>
-                                        </>
-                                    }
-                                    {isTitleForm &&
-                                        <>
-                                            <div className="content-option" onClick={handleClickTitle}>Happy Birthday!
-                                            </div>
-                                            <div className="content-option" onClick={handleClickTitle}>🤣 Happy Birthday!
-                                            </div>
-                                            <div className="content-option" onClick={handleClickTitle}>💖 Happy Birthday!
-                                                😘🎈
-                                            </div>
-                                            <div className="content-option" onClick={handleClickTitle}>🎊 Happy
-                                                Birthday,! 🥳🎁
-                                            </div>
-                                            <div className="content-option" onClick={handleClickTitle}>🎉 Wishing you a
-                                                wonderful
-                                                birthday filled with joy
-                                                and success! 🎂🎈
-                                            </div>
-                                            <div className="content-option" onClick={handleClickTitle}>🍀 Happy Birthday!
-                                            </div>
-                                            <div className="content-option" onClick={handleClickTitle}>🚀 Happy Birthday!
-                                            </div>
-                                            <div className="content-option" onClick={handleClickTitle}>Happy Birthday!
-                                                🎁🎈
-                                            </div>
-                                            <div className="content-option" onClick={handleClickTitle}>🎶 Another year,
-                                                another
-                                                adventure!🥂🎂
-                                            </div>
-                                            <div className="content-option" onClick={handleClickTitle}>Wishing you a
-                                                birthday as special as you are. 🎉💖
-                                            </div>
-                                        </>
-                                    }
+                            <div className="add-new-card-btn" onClick={addNewPage}>
+                                Add new page <IoMdAdd/>
+                            </div>
+                            <div
+                                className={`delete-card-btn ${pages.length === 1 ? "disabled" : ""}`}
+                                onClick={pages.length === 1 ? null : removeCurrentPage}
+                            >
+                                Delete page <MdDeleteForever/>
+                            </div>
+                            <div className="view-card-btn">
+                                View
+                            </div>
+                            <div className="create-card-btn" onClick={handleClick}>
+                                Create
+                            </div>
+                            <div
+                                className="next-card-btn"
+                                onClick={activePage.titlePage ? () => handlePageClick("contentPage") : currentPage === pages.length - 1 ? () => setCurrentPage(currentPage) : () => setCurrentPage(currentPage + 1)}
+                            >Next{"   "}<GrFormNextLink/>
+                            </div>
+                        </div>
 
-                                </div>
-                            </div>
-                            <div className="create-card-btn-wrap">
-                                <div className="next-card-btn">
-                                    Next
-                                </div>
-                                <div className="previous-card-btn">
-                                    Previous
-                                </div>
-                                <div className="add-new-card-btn">
-                                    Add new page
-                                </div>
-                                <div className="view-card-btn">
-                                    View
-                                </div>
-                                <div className="create-card-btn">
-                                    Create
-                                </div>
-                            </div>
-                        </div>
-                        <div className="edit-card-view-wrap">
-                            <div className="card-view-edit-wrap">
-                                <div className="card-view-edit-image">
-                                    {isTitleForm &&
-                                        <img src={birthdayCardCover} alt="card-view"/>
-                                    }
-                                    {!isTitleForm &&
-                                        <img src={birthdayCard} alt="card-view"/>
-                                    }
-                                </div>
-                                <div className="view-content-edit">
-                                    {isTitleForm &&
-                                        <div className="preview-title">
-                                            <p>{title}</p>
-                                        </div>
-                                    }
-                                    {!isTitleForm &&
-                                        <>
-                                            <div className="preview-receiver">
-                                                Deer{" "}
-                                                <span>{sender}</span>
-                                                ,
-                                            </div>
-                                            <div className="preview-content">
-                                                <p>{content}</p>
-                                            </div>
-                                            <div className="preview-sender">
-                                                From{" "}
-                                                <span>{receiver}</span>
-                                            </div>
-                                        </>
-                                    }
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <Footer/>
                 </div>
