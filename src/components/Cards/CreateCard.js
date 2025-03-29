@@ -1,15 +1,12 @@
 import Navigation from "../Navigation";
 import Footer from "../Footer";
-import birthdayCard from "../../assets/birthdaycard.png";
 import './CreateCard.scss'
 import {GrNext, GrPrevious} from "react-icons/gr";
 import {useRef, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
-import TitleForm from "./TitleForm";
 import CardPreview from "./CardPreview";
 import {BiHide, BiShow} from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
-import { saveFormData } from "../../redux/pageSlice";
 
 const CreateCard = () => {
 
@@ -48,7 +45,6 @@ const CreateCard = () => {
 
     const images = ["https://picsum.photos/200/300?random=1", "https://picsum.photos/200/300?random=2", "https://picsum.photos/200/300?random=3", "https://picsum.photos/200/300?random=4", "https://picsum.photos/200/300?random=5", "https://picsum.photos/200/300?random=6", "https://picsum.photos/200/300?random=7", "https://picsum.photos/200/300?random=8", "https://picsum.photos/200/300?random=9"];
 
-    const extendedImages = [...images, ...images];
     const totalImages = images.length;
 
     const [index, setIndex] = useState(0);
@@ -84,9 +80,6 @@ const CreateCard = () => {
     };
 
     const handleBack = () => {
-        localStorage.setItem("title", title);
-        localStorage.setItem("sender", sender);
-        localStorage.setItem("receiver", receiver);
         navigate(-1);
     };
 
